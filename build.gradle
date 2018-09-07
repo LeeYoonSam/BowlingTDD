@@ -10,7 +10,7 @@ plugins {
     id 'java'
 }
 
-group 'com.albert.bowling'
+group 'com.albert.game'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.10
