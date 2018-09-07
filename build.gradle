@@ -1,0 +1,29 @@
+buildscript {
+    ext {
+        junitVer = "5.+"
+        mockitoVer = "2.+"
+        assertjVer = "3.+"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group 'com.albert.bowling'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.10
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation("org.mockito:mockito-core:${mockitoVer}")
+    testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVer}")
+    testImplementation("org.assertj:assertj-core:${assertjVer}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junitVer}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVer}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVer}")
+}
