@@ -1,5 +1,8 @@
 package game;
 
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+
 /**
  * Bowling
  * 볼링 점수 계산 - http://stparkms.tistory.com/62
@@ -37,4 +40,9 @@ package game;
  *
  */
 public class BowlingTest {
+
+    @Test
+    void insertRoll() {
+        assertThat(Bowling.roll(1)).isEqualTo(1);
+    }
 }
