@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.*;
  * ############ Story ############
  * 한자리 점수 입력 1
  * 입력후 점수 출력 1 -> 1
+ * 입력후 점수 출력 2 -> 2
  * 입력 후 스코어 호출
  *
  * 숫자외 점수 입력 체크 a -> IllegalArgumentException
@@ -44,5 +45,6 @@ public class BowlingTest {
     @Test
     void insertRoll() {
         assertThat(Bowling.roll(1)).isEqualTo(1);
+        assertThat(Bowling.roll(2)).isEqualTo(2);
     }
 }
