@@ -20,26 +20,43 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  *
  *
  * ############ Story ############
+ * ### 점수입력 ###
  * 한자리 점수 입력 1
  * 입력후 점수 출력 1 -> 1
  * 입력후 점수 출력 2 -> 2
  * 입력 후 스코어 호출
  *
+ * ### 입력 예외 ###
  * 숫자 외 점수 입력 체크 a -> IllegalArgumentException
  * 0점 미만 점수 입력 -> IllegalArgumentException
  * 10초과 점수 입력 -> IllegalArgumentException
  *
- * 점수입력 2회 후 스코어 호출
- * 점수입력 20회 후 스코어 호출
+ * ### 프레임 확인 ###
+ * 점수 2번 입력 -> 1프레임
+ * 점수 4번 입력 -> 2프레임
+ * 점수 20번 입력 -> 10프레임
+ *
+ * ### 게임 종료 ###
+ * 점수 20번 입력 -> 게임종료
+ *
+ * ### 프레임 예외 ###
+ * 각 프레임당 합계 10점넘으면 IllegalStateException
  * 10프레임 종료 후 점수입력 시 IllegalStateException
+ *
+ * ### 총합 계산 ###
+ * 프레임당 점수 합계 표시
+ * 프레임당 스코어 총합 10점 -> 스패어 표시
+ * 10프레임 후 총합 표시
  * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
  * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
  *
+ * ### 추가점수 계산 ###
  * 스패어 처리 했을경우 1회 추가 점수
  * 스트라이크일때 2회 추가 점수
  * 스트라이크(10점)일때 한프레임 종료
  * 스트라이크인데 21번째 일경우 추가 점수 없음
  *
+ * ### 최저/최고 점수 테스트 ###
  * 최저점수 0점 테스트
  * 최고점수 300점 테스트
  *
@@ -63,7 +80,7 @@ public class BowlingTest {
     }
 
     @Test
-    void checkValidateNumber() {
+    void checkValidateArguments() {
         // 숫자 외 점수 입력 체크 -> int만 받으므로 입력 되지 않음
 
 
@@ -107,5 +124,29 @@ public class BowlingTest {
             // you can check exception type
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
+    }
+
+    @Test
+    void checkFrame() {
+
+        // 점수 2번 입력 -> 1프레임
+        assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+        bowling.roll(1);
+
+        // 점수 4번 입력 -> 2프레임
+        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+        bowling.roll(0);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+        bowling.roll(0);
+
+        assertThat(bowling.getCurrentFrame()).isEqualTo(3);
+
+
+
+
+        // 점수 20번 입력 -> 10프레임
+
     }
 }
