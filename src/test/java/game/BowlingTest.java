@@ -1,7 +1,8 @@
 package game;
 
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Bowling
@@ -44,7 +45,12 @@ public class BowlingTest {
 
     @Test
     void insertRoll() {
-        assertThat(Bowling.roll(1)).isEqualTo(1);
-        assertThat(Bowling.roll(2)).isEqualTo(2);
+        Bowling bowling = new Bowling();
+
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(1);
+
+        bowling.roll(2);
+        assertThat(bowling.score()).isEqualTo(2);
     }
 }

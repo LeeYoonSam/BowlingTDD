@@ -1,7 +1,13 @@
 package game;
 
 public class Bowling {
-    public static int roll(int point) {
+    private int point = 0;
+
+    public void roll(int point) {
+        this.point = point;
+    }
+
+    public int score() {
         return point;
     }
 }
