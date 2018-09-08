@@ -64,22 +64,21 @@ public class BowlingTest {
 
     private static Bowling bowling;
 
-    @BeforeAll
-    static void makeClass() {
-        bowling = new Bowling();
-    }
-
     @Test
     void insertRoll() {
+        bowling = new Bowling();
+
         bowling.roll(1);
         assertThat(bowling.score()).isEqualTo(1);
 
         bowling.roll(2);
-        assertThat(bowling.score()).isEqualTo(2);
+        assertThat(bowling.score()).isEqualTo(3);
     }
 
     @Test
     void checkValidateArguments() {
+        bowling = new Bowling();
+
         // 숫자 외 점수 입력 체크 -> int만 받으므로 입력 되지 않음
 
 
@@ -127,6 +126,7 @@ public class BowlingTest {
 
     @Test
     void checkFrame() {
+        bowling = new Bowling();
 
         // 점수 2번 입력 -> 1프레임
         assertThat(bowling.getCurrentFrame()).isEqualTo(1);
@@ -181,5 +181,20 @@ public class BowlingTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalStateException.class);
         }
+    }
+
+    // ### 총합 계산 ###
+    @Test
+    void sumScore() {
+        bowling = new Bowling();
+
+        // * 프레임당 점수 합계 표시
+        assertThat(bowling.roll(1)).isEqualTo(1);
+        assertThat(bowling.roll(1)).isEqualTo(2);
+
+        // * 프레임당 스코어 총합 10점 -> 스패어 표시
+        // * 10프레임 후 총합 표시
+        // * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
+        // * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
     }
 }
