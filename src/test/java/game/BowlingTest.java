@@ -192,8 +192,44 @@ public class BowlingTest {
         assertThat(bowling.roll(1)).isEqualTo(1);
         assertThat(bowling.roll(1)).isEqualTo(2);
 
-        // * 프레임당 스코어 총합 10점 -> 스패어 표시
         // * 10프레임 후 총합 표시
+        assertThat(bowling.roll(1)).isEqualTo(3);
+        assertThat(bowling.roll(1)).isEqualTo(4);
+
+        assertThat(bowling.roll(1)).isEqualTo(5);
+        assertThat(bowling.roll(1)).isEqualTo(6);
+
+        assertThat(bowling.roll(1)).isEqualTo(7);
+        assertThat(bowling.roll(1)).isEqualTo(8);
+
+        assertThat(bowling.roll(1)).isEqualTo(9);
+        assertThat(bowling.roll(1)).isEqualTo(10);
+
+        assertThat(bowling.roll(1)).isEqualTo(11);
+        assertThat(bowling.roll(1)).isEqualTo(12);
+
+        assertThat(bowling.roll(1)).isEqualTo(13);
+        assertThat(bowling.roll(1)).isEqualTo(14);
+
+        assertThat(bowling.roll(1)).isEqualTo(15);
+        assertThat(bowling.roll(1)).isEqualTo(16);
+
+        assertThat(bowling.roll(1)).isEqualTo(17);
+        assertThat(bowling.roll(1)).isEqualTo(18);
+
+        assertThat(bowling.roll(1)).isEqualTo(19);
+        assertThat(bowling.roll(1)).isEqualTo(20);
+
+        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
+
+        try {
+            bowling.roll(1);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(IllegalStateException.class);
+        }
+
+
+        // * 프레임당 스코어 총합 10점 -> 스패어 표시
         // * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
         // * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
     }
