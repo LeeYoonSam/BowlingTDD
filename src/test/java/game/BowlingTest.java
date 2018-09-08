@@ -83,5 +83,29 @@ public class BowlingTest {
             // you can check exception type
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
+
+        // 10점 이상 점수 입력
+        assertThat(bowling.roll(10)).isEqualTo(10);
+
+        try {
+            bowling.roll(11);
+        } catch (Exception e) {
+            // you can check exception type
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+
+        try {
+            bowling.roll(12);
+        } catch (Exception e) {
+            // you can check exception type
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+
+        try {
+            bowling.roll(1000);
+        } catch (Exception e) {
+            // you can check exception type
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
     }
 }

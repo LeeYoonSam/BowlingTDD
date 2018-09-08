@@ -4,7 +4,7 @@ public class Bowling {
     private int point = 0;
 
     public int roll(int point) {
-        if(point < 0) {
+        if(point < 0 || point > 10) {
             throw new IllegalArgumentException();
         }
 
