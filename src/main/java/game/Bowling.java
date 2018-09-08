@@ -8,9 +8,15 @@ public class Bowling {
     private int currentFrame = 1;
     private int frameCount = 0;
 
+    private boolean isGameOver = false;
+
     public int roll(int point) {
         if(point < 0 || point > 10) {
             throw new IllegalArgumentException();
+        }
+
+        if(isGameOver) {
+            throw new IllegalStateException("게임종료");
         }
 
         this.point = point;
@@ -22,9 +28,12 @@ public class Bowling {
 
             // 10프레임 종료
             if(currentFrame < MAX_FRAME) {
-                currentFrame ++;
+                ++ currentFrame;
             }
         }
+
+        if(currentFrame > MAX_FRAME)
+            isGameOver = true;
 
         return score();
     }

@@ -35,13 +35,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * 점수 2번 입력 -> 1프레임
  * 점수 4번 입력 -> 2프레임
  * 점수 20번 입력 -> 10프레임
+ * 10프레임 종료 후 점수입력 시 IllegalStateException
  *
  * ### 게임 종료 ###
  * 점수 20번 입력 -> 게임종료
- *
- * ### 프레임 예외 ###
- * 각 프레임당 합계 10점넘으면 IllegalStateException
- * 10프레임 종료 후 점수입력 시 IllegalStateException
  *
  * ### 총합 계산 ###
  * 프레임당 점수 합계 표시
@@ -49,6 +46,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * 10프레임 후 총합 표시
  * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
  * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
+ *
+ * 각 프레임당 합계 10점넘으면 IllegalStateException
  *
  * ### 추가점수 계산 ###
  * 스패어 처리 했을경우 1회 추가 점수
@@ -169,5 +168,18 @@ public class BowlingTest {
         bowling.roll(0);
 
         assertThat(bowling.getCurrentFrame()).isEqualTo(10);
+
+        // 10프레임 종료 후 점수입력 시 IllegalStateException
+        try {
+            bowling.roll(0);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(IllegalStateException.class);
+        }
+
+        try {
+            bowling.roll(1);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(IllegalStateException.class);
+        }
     }
 }
