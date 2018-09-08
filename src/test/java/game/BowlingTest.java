@@ -1,8 +1,11 @@
 package game;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Bowling
@@ -22,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 입력후 점수 출력 2 -> 2
  * 입력 후 스코어 호출
  *
- * 숫자외 점수 입력 체크 a -> IllegalArgumentException
+ * 숫자 외 점수 입력 체크 a -> IllegalArgumentException
  * 0점 미만 점수 입력 -> IllegalArgumentException
  * 10초과 점수 입력 -> IllegalArgumentException
  *
@@ -43,14 +46,42 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class BowlingTest {
 
+    private static Bowling bowling;
+
+    @BeforeAll
+    static void makeClass() {
+        bowling = new Bowling();
+    }
+
     @Test
     void insertRoll() {
-        Bowling bowling = new Bowling();
-
         bowling.roll(1);
         assertThat(bowling.score()).isEqualTo(1);
 
         bowling.roll(2);
         assertThat(bowling.score()).isEqualTo(2);
+    }
+
+    @Test
+    void checkValidateNumber() {
+        // 숫자 외 점수 입력 체크 -> int만 받으므로 입력 되지 않음
+
+
+        // 0점 미만 점수 입력
+        assertThat(bowling.roll(0)).isEqualTo(0);
+
+        try {
+            bowling.roll(-1);
+        } catch (Exception e) {
+            // you can check exception type
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+
+        try {
+            bowling.roll(-2);
+        } catch (Exception e) {
+            // you can check exception type
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
     }
 }
