@@ -7,8 +7,6 @@ public class Bowling {
     private int score = 0;
     private int currentFrame = 1;
     private int frameCount = 0;
-//    private int frameScore = 0;
-//    private int frameSumScore = 0;
 
     private boolean isGameOver = false;
 
@@ -46,5 +44,13 @@ public class Bowling {
 
     public int getCurrentFrame() {
         return currentFrame;
+    }
+
+    public void clearGame() {
+        score = 0;
+        currentFrame = 1;
+        frameCount = 0;
+
+        isGameOver = false;
     }
 }

@@ -42,6 +42,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  *
  * ### 총합 계산 ###
  * 프레임당 점수 합계 표시
+ * 프레임당 스코어 최대합 확인 - 1프레임(1회, 2회)값 10점 이하 입력 -> 합계 표시
+ * 프레임당 스코어 최대합 확인 - 1프레임(1회, 2회)값 10점 이상 입력 -> IllegalArgumentException
  * 프레임당 스코어 총합 10점 -> 스패어 표시
  * 10프레임 후 총합 표시
  * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
@@ -228,6 +230,19 @@ public class BowlingTest {
             assertThat(e).isInstanceOf(IllegalStateException.class);
         }
 
+
+        // * 프레임당 스코어 최대합 확인 - 1프레임(1회, 2회)값 10점 이하 입력 -> 합계 표시
+        bowling.clearGame();
+        bowling.roll(5);
+        bowling.roll(5);
+        assertThat(bowling.score()).isEqualTo(10);
+
+        bowling.clearGame();
+        bowling.roll(0);
+        bowling.roll(0);
+        assertThat(bowling.score()).isEqualTo(0);
+
+        // * 프레임당 스코어 최대합 확인 - 1프레임(1회, 2회)값 10점 이상 입력 -> IllegalArgumentException
 
         // * 프레임당 스코어 총합 10점 -> 스패어 표시
         // * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
