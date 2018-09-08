@@ -131,21 +131,22 @@ public class BowlingTest {
         bowling = new Bowling();
 
         // 점수 2번 입력 -> 1프레임
-        assertThat(bowling.getCurrentFrame()).isEqualTo(1);
         bowling.roll(1);
         assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+
         bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+
 
         // 점수 4번 입력 -> 2프레임
-        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
         bowling.roll(0);
         assertThat(bowling.getCurrentFrame()).isEqualTo(2);
         bowling.roll(0);
-
-        assertThat(bowling.getCurrentFrame()).isEqualTo(3);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
 
         // 점수 20번 입력 -> 10프레임
         bowling.roll(0);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(3);
         bowling.roll(0);
 
         bowling.roll(0);
@@ -261,9 +262,29 @@ public class BowlingTest {
         } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
+    }
 
+    @Test
+    void checkSpare() {
+        bowling = new Bowling();
 
         // * 프레임당 스코어 총합 10점 -> 스패어 처리
+        bowling.roll(0);
+        bowling.roll(1);
+        assertThat(bowling.isSpare()).isEqualTo(false);
+
+        bowling.roll(10);
+        bowling.roll(0);
+        assertThat(bowling.isSpare()).isEqualTo(true);
+
+        bowling.roll(5);
+        bowling.roll(5);
+        assertThat(bowling.isSpare()).isEqualTo(true);
+
+        bowling.roll(1);
+        bowling.roll(2);
+        assertThat(bowling.isSpare()).isEqualTo(false);
+
         // * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
         // * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
     }
