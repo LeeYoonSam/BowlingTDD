@@ -143,10 +143,31 @@ public class BowlingTest {
 
         assertThat(bowling.getCurrentFrame()).isEqualTo(3);
 
-
-
-
         // 점수 20번 입력 -> 10프레임
+        bowling.roll(0);
+        bowling.roll(0);
 
+        bowling.roll(0);
+        bowling.roll(0);
+
+        bowling.roll(0);
+        bowling.roll(0);
+
+        bowling.roll(0);
+        bowling.roll(0);
+
+        bowling.roll(0);
+        bowling.roll(0);
+
+        bowling.roll(0);
+        bowling.roll(0);
+
+        bowling.roll(0);
+        bowling.roll(0);
+
+        bowling.roll(0);
+        bowling.roll(0);
+
+        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
     }
 }
