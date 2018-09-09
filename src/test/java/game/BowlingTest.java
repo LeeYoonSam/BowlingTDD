@@ -382,7 +382,7 @@ public class BowlingTest {
 
     // ### 추가점수 계산 ###
     @Test
-    void calcScore() {
+    void calcSpare() {
         bowling = new Bowling();
         //* 스패어 처리 했을경우 1회 추가 점수
         bowling.roll(8);
@@ -390,17 +390,53 @@ public class BowlingTest {
         assertThat(bowling.score()).isEqualTo(10);
 
         bowling.roll(5);
-        assertThat(bowling.score()).isEqualTo(15);
-
-        bowling.plusPrevScore();
         assertThat(bowling.score()).isEqualTo(20);
-
-        //* 스트라이크일때 2회 추가 점수
-        //* 스트라이크(10점)일때 한프레임 종료
-        //* 스트라이크인데 21번째 일경우 추가 점수 없음
     }
 
+    @Test
+    void calcStrike() {
+        bowling = new Bowling();
 
+        //* 스트라이크일때 2회 추가 점수
 
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(10);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(1);
 
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(30);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(2);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(50);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(3);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(80);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(4);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(110);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(5);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(140);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(6);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(170);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(7);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(200);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(8);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(200);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(LAST_FRAME);
+
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(230);
+
+    }
 }

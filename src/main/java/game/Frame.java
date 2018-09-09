@@ -7,6 +7,7 @@ public class Frame {
     int score = 0;
     int bonusScore = 0;
     int frameIndex;
+    int bonusCount = 0;
 
     boolean isFirstRoll = true;
     boolean isSpare = false;
@@ -55,7 +56,10 @@ public class Frame {
     }
 
     void addBouns(int bonus) {
-        this.bonusScore = bonus;
+        if(bonusCount > 0) {
+            this.bonusScore += bonus;
+            bonusCount --;
+        }
     }
 
     int getScore() {
@@ -75,8 +79,10 @@ public class Frame {
         if(score == MAX_PIN) {
             if(isFirstRoll) {
                 isStrike = true;
+                bonusCount = 2;
             } else {
                 isSpare = true;
+                bonusCount = 1;
             }
 
             if(isLastFrame)

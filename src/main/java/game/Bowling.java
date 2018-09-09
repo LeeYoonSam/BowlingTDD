@@ -24,7 +24,7 @@ public class Bowling implements IBowling {
         this.score += currentFrame.addPin(pin);
 
         // 스패어 보너스 체크
-        checkSpare();
+        checkBonus();
 
         checkEndFrame();
 
@@ -69,13 +69,15 @@ public class Bowling implements IBowling {
         }
     }
 
-    private void checkSpare() {
+    private void checkBonus() {
         if(prevFrameIndex < 0)
             return;
 
         Frame prevFrame = bowlingFrames[prevFrameIndex];
-        if(prevFrame.isSpare) {
+        if(prevFrame.isSpare || prevFrame.isStrike) {
             prevFrame.addBouns(currentFrame.score);
+
+            this.score += prevFrame.getBonusScore();
         }
     }
 
