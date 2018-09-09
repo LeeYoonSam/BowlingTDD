@@ -1,128 +1,97 @@
 package game;
 
-public class Bowling {
+public class Bowling implements IBowling {
 
-    public static final int LAST_FRAME = 10;
-    public static final int MAX_ONE_FRAME_COUNT = 2;
-    public static final int MAX_SCORE = 10;
+    private Frame[] bowlingFrames = new Frame[10];
+    private Frame currentFrame;
 
-    private int currentFrame = 1;
+    public static final int LAST_FRAME_INDEX = 9;
 
+    private int prevFrameIndex = -999;
+    private int currentFrameIndex = 0;
     private int score = 0;
-    private int frameScore = 0;
-    private int frameCount = 0;
 
-    private boolean isSpare = false;
-    private boolean isStrike = false;
-    private boolean isLastFrameBonus = false;
+    @Override
+    public boolean roll(int pin) {
 
-    private boolean isGameOver = false;
-
-    public int roll(int score) {
-        if(score < 0 || score > MAX_SCORE) {
-            throw new IllegalArgumentException("정수 값 범위 초과");
+        if(currentFrameIndex > LAST_FRAME_INDEX) {
+            if(currentFrame.isLastFrame && !currentFrame.isSpare || !currentFrame.isStrike)
+                throw new IllegalStateException("게임종료");
         }
 
-        if(isGameOver) {
-            throw new IllegalStateException("게임종료");
-        }
+        setCurrentFrame();
 
-        if(!addFrameScore(score)) {
-            throw new IllegalArgumentException("프레입 합계 10점 초과");
-        }
+        this.score += currentFrame.addPin(pin);
 
-        this.score += score;
+        // 스패어 보너스 체크
+        checkSpare();
 
         checkEndFrame();
 
-        return score();
+        return false;
     }
 
-    private void checkEndFrame() {
-        // 점수 2회 입력 시 프레임 변경
-        if(frameCount == MAX_ONE_FRAME_COUNT) {
-            currentFrame ++;
-
-            System.out.println("currentFrame: " + getCurrentFrame());
-            if(currentFrame > LAST_FRAME) {
-                if(!isLastFrameBonus) {
-                    isGameOver = true;
-                }
-            }
-        }
-    }
-
-    private boolean addFrameScore(int score) {
-        if(frameCount == MAX_ONE_FRAME_COUNT) {
-            clearFrame();
-        }
-
-        if(isLastFrameBonus) {
-            frameScore += score;
-            isLastFrameBonus = false;
-
-            isGameOver = true;
-
-            return true;
-        }
-
-        frameScore += score;
-        System.out.println("frameScore: " + frameScore);
-
-        frameCount ++;
-
-        if(frameScore > MAX_SCORE) {
-            return false;
-        }
-
-        if(frameScore == MAX_SCORE) {
-
-            if(frameCount == 1) {
-                isStrike = true;
-                frameCount = MAX_ONE_FRAME_COUNT;
-            } else {
-                isSpare = true;
-            }
-
-            if(currentFrame == LAST_FRAME) {
-                isLastFrameBonus = true;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean isSpare() {
-        return isSpare;
-    }
-
-    public boolean isStrike() {
-        return isStrike;
-    }
-
+    @Override
     public int score() {
         return score;
     }
 
-    public int getCurrentFrame() {
-        return currentFrame;
+    public void plusPrevScore() {
+        if(prevFrameIndex < 0)
+            return;
+
+        Frame prevFrame = bowlingFrames[prevFrameIndex];
+        this.score += prevFrame.getBonusScore();
     }
 
-    private void clearFrame() {
-        frameCount = 0;
-        frameScore = 0;
-        isSpare = false;
-        isStrike = false;
+    public void setCurrentFrame() {
+        if(bowlingFrames[currentFrameIndex] == null) {
+
+            if(currentFrame != null) {
+                if(currentFrame.isLastFrame) {
+                    return;
+                }
+            }
+
+            bowlingFrames[currentFrameIndex] = new Frame(currentFrameIndex);
+            currentFrame = bowlingFrames[currentFrameIndex];
+        }
+    }
+
+    public int getCurrentFrameIndex() {
+        return currentFrameIndex;
+    }
+
+    private void checkEndFrame() {
+        if(currentFrame.checkEndFrame()) {
+            prevFrameIndex = currentFrameIndex;
+            currentFrameIndex ++;
+        }
+    }
+
+    private void checkSpare() {
+        if(prevFrameIndex < 0)
+            return;
+
+        Frame prevFrame = bowlingFrames[prevFrameIndex];
+        if(prevFrame.isSpare) {
+            prevFrame.addBouns(currentFrame.score);
+        }
     }
 
     public void clearGame() {
+        bowlingFrames = new Frame[10];
+        currentFrame = null;
         score = 0;
-        frameScore = 0;
-        currentFrame = 1;
-        frameCount = 0;
+        currentFrameIndex = 0;
+        prevFrameIndex = -999;
+    }
 
-        isSpare = false;
-        isLastFrameBonus = false;
-        isGameOver = false;
+    public boolean isSpare() {
+        return currentFrame.isSpare;
+    }
+
+    public boolean isStrike() {
+        return currentFrame.isStrike;
     }
 }

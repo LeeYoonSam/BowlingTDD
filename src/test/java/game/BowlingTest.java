@@ -61,6 +61,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 public class BowlingTest {
 
+    final int LAST_FRAME = 9;
+
     private static Bowling bowling;
 
     @Test
@@ -82,7 +84,8 @@ public class BowlingTest {
 
 
         // 0점 미만 점수 입력
-        assertThat(bowling.roll(0)).isEqualTo(0);
+        bowling.roll(0);
+        assertThat(bowling.score()).isEqualTo(0);
 
         assertThatThrownBy(() ->
                 bowling.roll(-1)
@@ -94,7 +97,8 @@ public class BowlingTest {
         ).isInstanceOf(IllegalArgumentException.class);
 
         // 10점 이상 점수 입력
-        assertThat(bowling.roll(10)).isEqualTo(10);
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(10);
 
         assertThatThrownBy(() ->
                 bowling.roll(11)
@@ -114,21 +118,21 @@ public class BowlingTest {
         bowling = new Bowling();
 
         // 점수 2번 입력 -> 1프레임
-        assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(0);
         bowling.roll(1);
 
-        assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(0);
         bowling.roll(1);
 
 
         // 점수 4번 입력 -> 2프레임
-        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(1);
         bowling.roll(0);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(1);
         bowling.roll(0);
 
         // 점수 20번 입력 -> 10프레임
-        assertThat(bowling.getCurrentFrame()).isEqualTo(3);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(2);
         bowling.roll(0);
         bowling.roll(0);
 
@@ -150,7 +154,7 @@ public class BowlingTest {
         bowling.roll(0);
         bowling.roll(0);
 
-        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(LAST_FRAME);
         bowling.roll(0);
         bowling.roll(0);
 
@@ -171,37 +175,58 @@ public class BowlingTest {
         bowling = new Bowling();
 
         // * 프레임당 점수 합계 표시
-        assertThat(bowling.roll(1)).isEqualTo(1);
-        assertThat(bowling.roll(1)).isEqualTo(2);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(1);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(2);
 
         // * 10프레임 후 총합 표시
-        assertThat(bowling.roll(1)).isEqualTo(3);
-        assertThat(bowling.roll(1)).isEqualTo(4);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(3);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(4);
 
-        assertThat(bowling.roll(1)).isEqualTo(5);
-        assertThat(bowling.roll(1)).isEqualTo(6);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(5);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(6);
 
-        assertThat(bowling.roll(1)).isEqualTo(7);
-        assertThat(bowling.roll(1)).isEqualTo(8);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(7);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(8);
 
-        assertThat(bowling.roll(1)).isEqualTo(9);
-        assertThat(bowling.roll(1)).isEqualTo(10);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(9);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(10);
 
-        assertThat(bowling.roll(1)).isEqualTo(11);
-        assertThat(bowling.roll(1)).isEqualTo(12);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(11);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(12);
 
-        assertThat(bowling.roll(1)).isEqualTo(13);
-        assertThat(bowling.roll(1)).isEqualTo(14);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(13);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(14);
 
-        assertThat(bowling.roll(1)).isEqualTo(15);
-        assertThat(bowling.roll(1)).isEqualTo(16);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(15);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(16);
 
-        assertThat(bowling.roll(1)).isEqualTo(17);
-        assertThat(bowling.roll(1)).isEqualTo(18);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(17);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(18);
 
-        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
-        assertThat(bowling.roll(1)).isEqualTo(19);
-        assertThat(bowling.roll(1)).isEqualTo(20);
+        // 마지막 프레임
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(LAST_FRAME);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(19);
+        bowling.roll(1);
+        assertThat(bowling.score()).isEqualTo(20);
 
         assertThatThrownBy(() ->
                 bowling.roll(1)
@@ -228,7 +253,8 @@ public class BowlingTest {
 
         bowling.clearGame();
         bowling.roll(0);
-        assertThat(bowling.roll(10)).isEqualTo(10);
+        bowling.roll(10);
+        assertThat(bowling.score()).isEqualTo(10);
 
         bowling.clearGame();
         bowling.roll(10);
@@ -301,45 +327,45 @@ public class BowlingTest {
 
         // 1프레임
         bowling.roll(10);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(1);
 
         // 2프레임
         bowling.roll(1);
         bowling.roll(1);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(3);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(2);
 
         // 3프레임
         bowling.roll(10);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(4);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(3);
 
         // 4프레임
         bowling.roll(10);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(5);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(4);
 
         // 5프레임
         bowling.roll(1);
         bowling.roll(1);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(6);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(5);
 
         // 6프레임
         bowling.roll(1);
         bowling.roll(1);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(7);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(6);
 
         // 7프레임
         bowling.roll(1);
         bowling.roll(1);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(8);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(7);
 
         // 8프레임
         bowling.roll(1);
         bowling.roll(1);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(9);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(8);
 
         // 9프레임
         bowling.roll(1);
         bowling.roll(1);
-        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
+        assertThat(bowling.getCurrentFrameIndex()).isEqualTo(LAST_FRAME);
 
         // 10프레임
         bowling.roll(1);
@@ -353,4 +379,28 @@ public class BowlingTest {
                 bowling.roll(10)
         ).isInstanceOf(IllegalStateException.class);
     }
+
+    // ### 추가점수 계산 ###
+    @Test
+    void calcScore() {
+        bowling = new Bowling();
+        //* 스패어 처리 했을경우 1회 추가 점수
+        bowling.roll(8);
+        bowling.roll(2);
+        assertThat(bowling.score()).isEqualTo(10);
+
+        bowling.roll(5);
+        assertThat(bowling.score()).isEqualTo(15);
+
+        bowling.plusPrevScore();
+        assertThat(bowling.score()).isEqualTo(20);
+
+        //* 스트라이크일때 2회 추가 점수
+        //* 스트라이크(10점)일때 한프레임 종료
+        //* 스트라이크인데 21번째 일경우 추가 점수 없음
+    }
+
+
+
+
 }
