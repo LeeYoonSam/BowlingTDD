@@ -13,6 +13,7 @@ public class Bowling {
     private int frameCount = 0;
 
     private boolean isSpare = false;
+    private boolean isStrike = false;
     private boolean isLastFrameBonus = false;
 
     private boolean isGameOver = false;
@@ -70,8 +71,18 @@ public class Bowling {
 
         frameCount ++;
 
+        if(frameScore > MAX_SCORE) {
+            return false;
+        }
+
         if(frameScore == MAX_SCORE) {
-            isSpare = true;
+
+            if(frameCount == 1) {
+                isStrike = true;
+                frameCount = MAX_ONE_FRAME_COUNT;
+            } else {
+                isSpare = true;
+            }
 
             if(currentFrame == LAST_FRAME) {
                 isLastFrameBonus = true;
@@ -83,6 +94,10 @@ public class Bowling {
 
     public boolean isSpare() {
         return isSpare;
+    }
+
+    public boolean isStrike() {
+        return isStrike;
     }
 
     public int score() {
@@ -97,6 +112,7 @@ public class Bowling {
         frameCount = 0;
         frameScore = 0;
         isSpare = false;
+        isStrike = false;
     }
 
     public void clearGame() {

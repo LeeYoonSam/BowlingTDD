@@ -2,6 +2,7 @@ package game;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Bowling
@@ -83,43 +84,29 @@ public class BowlingTest {
         // 0점 미만 점수 입력
         assertThat(bowling.roll(0)).isEqualTo(0);
 
-        try {
-            bowling.roll(-1);
-        } catch (Exception e) {
-            // you can check exception type
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(-1)
+        ).isInstanceOf(IllegalArgumentException.class);
 
-        try {
-            bowling.roll(-2);
-        } catch (Exception e) {
-            // you can check exception type
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+
+        assertThatThrownBy(() ->
+                bowling.roll(-2)
+        ).isInstanceOf(IllegalArgumentException.class);
 
         // 10점 이상 점수 입력
         assertThat(bowling.roll(10)).isEqualTo(10);
 
-        try {
-            bowling.roll(11);
-        } catch (Exception e) {
-            // you can check exception type
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(11)
+        ).isInstanceOf(IllegalArgumentException.class);
 
-        try {
-            bowling.roll(12);
-        } catch (Exception e) {
-            // you can check exception type
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(12)
+        ).isInstanceOf(IllegalArgumentException.class);
 
-        try {
-            bowling.roll(1000);
-        } catch (Exception e) {
-            // you can check exception type
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(1000)
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -169,17 +156,13 @@ public class BowlingTest {
 
 
         // 10프레임 종료 후 점수입력 시 IllegalStateException
-        try {
-            bowling.roll(0);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalStateException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(0)
+        ).isInstanceOf(IllegalStateException.class);
 
-        try {
-            bowling.roll(1);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalStateException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(1)
+        ).isInstanceOf(IllegalStateException.class);
     }
 
     // ### 총합 계산 ###
@@ -220,11 +203,9 @@ public class BowlingTest {
         assertThat(bowling.roll(1)).isEqualTo(19);
         assertThat(bowling.roll(1)).isEqualTo(20);
 
-        try {
-            bowling.roll(1);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalStateException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(1)
+        ).isInstanceOf(IllegalStateException.class);
 
 
         // * 프레임당 스코어 최대합 확인 - 1프레임(1회, 2회)값 10점 이하 입력 -> 합계 표시
@@ -240,23 +221,21 @@ public class BowlingTest {
 
         // * 프레임당 스코어 최대합 확인 - 1프레임(1회, 2회)값 10점 이상 입력 -> IllegalArgumentException
         bowling.clearGame();
-        try {
-            bowling.roll(5);
-            bowling.roll(6);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        bowling.roll(5);
+        assertThatThrownBy(() ->
+                    bowling.roll(6)
+        ).isInstanceOf(IllegalArgumentException.class);
 
         bowling.clearGame();
         bowling.roll(0);
         assertThat(bowling.roll(10)).isEqualTo(10);
 
-        try {
-            bowling.roll(10);
-            bowling.roll(10);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalArgumentException.class);
-        }
+        bowling.clearGame();
+        bowling.roll(10);
+//        assertThatThrownBy(() ->
+//            bowling.roll(10)
+//        ).isInstanceOf(IllegalStateException.class);
+
     }
 
     @Test
@@ -269,8 +248,8 @@ public class BowlingTest {
         assertThat(bowling.isSpare()).isEqualTo(false);
 
         bowling.roll(10);
-        bowling.roll(0);
-        assertThat(bowling.isSpare()).isEqualTo(true);
+//        bowling.roll(0);
+        assertThat(bowling.isStrike()).isEqualTo(true);
 
         bowling.roll(5);
         bowling.roll(5);
@@ -309,13 +288,69 @@ public class BowlingTest {
         bowling.roll(3);
 
         // 마지막 프레임 스패어 처리 실패 시 IllegalStateException
-        try {
-            bowling.roll(10);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(IllegalStateException.class);
-        }
+        assertThatThrownBy(() ->
+                bowling.roll(10)
+        ).isInstanceOf(IllegalStateException.class);
+    }
 
+    @Test
+    void checkStrikeFrame() {
+        bowling = new Bowling();
 
         // * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
+
+        // 1프레임
+        bowling.roll(10);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+
+        // 2프레임
+        bowling.roll(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(3);
+
+        // 3프레임
+        bowling.roll(10);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(4);
+
+        // 4프레임
+        bowling.roll(10);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(5);
+
+        // 5프레임
+        bowling.roll(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(6);
+
+        // 6프레임
+        bowling.roll(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(7);
+
+        // 7프레임
+        bowling.roll(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(8);
+
+        // 8프레임
+        bowling.roll(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(9);
+
+        // 9프레임
+        bowling.roll(1);
+        bowling.roll(1);
+        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
+
+        // 10프레임
+        bowling.roll(1);
+        bowling.roll(1);
+
+        assertThatThrownBy(() ->
+                bowling.roll(1)
+        ).isInstanceOf(IllegalStateException.class);
+
+        assertThatThrownBy(() ->
+                bowling.roll(10)
+        ).isInstanceOf(IllegalStateException.class);
     }
 }
