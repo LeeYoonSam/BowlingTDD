@@ -1,11 +1,7 @@
 package game;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Bowling
@@ -131,24 +127,21 @@ public class BowlingTest {
         bowling = new Bowling();
 
         // 점수 2번 입력 -> 1프레임
-        bowling.roll(1);
         assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+        bowling.roll(1);
 
-        bowling.roll(1);
         assertThat(bowling.getCurrentFrame()).isEqualTo(1);
+        bowling.roll(1);
 
 
         // 점수 4번 입력 -> 2프레임
-        bowling.roll(0);
         assertThat(bowling.getCurrentFrame()).isEqualTo(2);
         bowling.roll(0);
         assertThat(bowling.getCurrentFrame()).isEqualTo(2);
+        bowling.roll(0);
 
         // 점수 20번 입력 -> 10프레임
-        bowling.roll(0);
         assertThat(bowling.getCurrentFrame()).isEqualTo(3);
-        bowling.roll(0);
-
         bowling.roll(0);
         bowling.roll(0);
 
@@ -171,6 +164,9 @@ public class BowlingTest {
         bowling.roll(0);
 
         assertThat(bowling.getCurrentFrame()).isEqualTo(10);
+        bowling.roll(0);
+        bowling.roll(0);
+
 
         // 10프레임 종료 후 점수입력 시 IllegalStateException
         try {
@@ -220,10 +216,9 @@ public class BowlingTest {
         assertThat(bowling.roll(1)).isEqualTo(17);
         assertThat(bowling.roll(1)).isEqualTo(18);
 
+        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
         assertThat(bowling.roll(1)).isEqualTo(19);
         assertThat(bowling.roll(1)).isEqualTo(20);
-
-        assertThat(bowling.getCurrentFrame()).isEqualTo(10);
 
         try {
             bowling.roll(1);
@@ -284,8 +279,43 @@ public class BowlingTest {
         bowling.roll(1);
         bowling.roll(2);
         assertThat(bowling.isSpare()).isEqualTo(false);
+    }
+
+    @Test
+    void checkLastFrameBonus() {
+        bowling = new Bowling();
 
         // * 10프레임 마지막까지 스패어나 스트라이크시 roll 1회 추가
+        for(var i = 0; i < 9; i ++) {
+            bowling.roll(0);
+            bowling.roll(0);
+        }
+
+        bowling.roll(9);
+        bowling.roll(1);
+
+        // 10프레임에서 스패어 처리로 보너스 1회 체크 / IllegalStateException이 나오면 안됨
+        bowling.roll(5);
+
+        // 10프레임에서 보너스 획득 실패
+        bowling.clearGame();
+        for(var i = 0; i < 9; i ++) {
+            bowling.roll(0);
+            bowling.roll(0);
+        }
+
+        // 마지막 프레임
+        bowling.roll(5);
+        bowling.roll(3);
+
+        // 마지막 프레임 스패어 처리 실패 시 IllegalStateException
+        try {
+            bowling.roll(10);
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(IllegalStateException.class);
+        }
+
+
         // * 각 프레임의 첫번째 roll에서 스트라이크시 해당 프레임 종료
     }
 }
